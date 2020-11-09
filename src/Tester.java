@@ -7,50 +7,34 @@ import java.util.Scanner;
 public class Tester {
 
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("test2.jl");
-        Scanner scanner = new Scanner(file);
-
-        //Read in file
-        int index = 0;
-        int lineNumber = 1;
-        ArrayList<String> listOfTokens = new ArrayList<String>();
-        ArrayList<Token> TokensClass = new ArrayList<Token>();
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine().trim();
-
-            if (line.length() != 0) {
-                //Separate the line with spaces...
-                String[] bar = line.split(" ");
-
-                ArrayList<String> lines = new ArrayList<String>();
-                for (String s : bar){
-                    if(s.length() != 0){
-
-                        lines.add(s);
-                    }
-
-                }
-
-                for (String s : lines) {
-
-                    Lexeme l = new Lexeme(s);
-
-                    Token token = new Token(index, l.getTokenType(), l.getLexemeName(), lineNumber, s);
-                    TokensClass.add(token);
-                    //listOfTokens.add("Token " + tokens + ": " + s + " Line : " + lineNumber);
-                    //	tokens++;
-                    index++;
-                }
-
-                lineNumber++;
-
-            }
-
-
+        ProjScanner scan = new ProjScanner("test2.jl");
+        //scan.printTokenList();
+    	
+        ProjParser parser = new ProjParser();
+        
+        
+        String test = "value := evaluate(expr.expr1) * evaluate (expr.expr2);";
+        
+        char[] listOfLexemeCharacters = {'(',')','{','}', ';', ':', '.'};
+        int start = 0;
+        int charLocation = 0;
+        ArrayList<String> data = new ArrayList<String>();
+        
+        for (int i = 0; i < test.length();i++) {
+        	for (char c : listOfLexemeCharacters) {
+        		if (c == test.charAt(i)) {
+        			charLocation = i;
+        			data.add("Substring Process : " + test.substring(start, charLocation));
+        			data.add("CharAt Process : " + Character.toString(test.charAt(i)));
+        			start = i;
+        			break;
+        		}
+        	}
         }
-
-        for (Token token : TokensClass) {
-            System.out.println(token.toString());
+        
+        for(String s : data) {
+        	System.out.println(s);
         }
     }
+    
 }

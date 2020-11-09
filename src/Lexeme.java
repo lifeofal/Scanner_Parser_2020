@@ -20,7 +20,6 @@ public class Lexeme {
         boolean flag = true;
 
 
-
         if(!var.equals("")) {
             for (int i = 0; i < variables.length; i++) {
                 if (var.charAt(0) == variables[i].charAt(0)) {
@@ -32,7 +31,7 @@ public class Lexeme {
             }
         }
 
-        if (flag) {
+        if (flag && var.length() > 0) {
             for (int i = 0; i < intLiterals.length; i++) {
                 if (var.charAt(0) == intLiterals[i].charAt(0)) {
                     tokenType = "NonLexeme";
@@ -42,7 +41,7 @@ public class Lexeme {
                 }
             }
         }
-        if(flag){
+        if(flag && var.length() > 0){
             tokenType = "Lexeme";
                 switch (var.charAt(0)) {
                     case '+':
@@ -96,14 +95,4 @@ public class Lexeme {
     public String toString() {
         return tokenType + "." + lexemeName;
     }
-
-
-
-    /*
-     * Token
-     * ID
-     * Type of Lexeme/Non-Lexeme
-     * S
-     *
-     */
 }
