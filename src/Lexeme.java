@@ -41,6 +41,7 @@ public class Lexeme {
                 }
             }
         }
+        
         if(flag && var.length() > 0){
             tokenType = "Lexeme";
                 switch (var.charAt(0)) {
@@ -74,10 +75,16 @@ public class Lexeme {
                     case'>':
                         lexemeName = "LESS";
                         break;
+                    case '(':
+                    	lexemeName = "OPEN_PAREN";
+                    	break;
+                    case ')':
+                    	lexemeName = "CLOSE_PAREN";
+                    case ';':
+                    	lexemeName = "END_OF_LINE";
                     default:
                         lexemeName = "SYMBOL";
                         break;
-
             }
         }
 

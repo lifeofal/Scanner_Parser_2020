@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class ProjScanner {
 	private ArrayList<Token> listOfTokens;
-	private char[] listOfLexemeCharacters = {'(',')','{','}', ';', ':', '.'};
+	private ArrayList<Line> listOfLines;
+	private char[] listOfLexemeCharacters = {'(',')','{','}', ';', ':', '.', '*'};
 	private int index;
 	private int lineNumber;
     
@@ -16,18 +17,22 @@ public class ProjScanner {
 	
 	public void initializeLocalVariables() {
 		listOfTokens = new ArrayList<Token>();
+		listOfLines = new ArrayList<Line>();
 		index = 0;
 		lineNumber = 1;
 	}
 	
 	public void loadInADAFile(String filename) throws FileNotFoundException {
-		File file = new File("test2.jl");
+		File file = new File("test3.jl");
         Scanner scanner = new Scanner(file);
         
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-
-            if (line.length() != 0) {
+            Line currentLine = new Line(lineNumber);
+            listOfLines.add(currentLine);
+            if (line.contains("--")) {
+            	
+            } else if (line.length() != 0) {
                 String[] currentLineSplit = line.split(" ");
 
                 for (String currentString : currentLineSplit){
@@ -43,7 +48,7 @@ public class ProjScanner {
                         	}
                         }
                     }
-                }
+                }            
             }
             lineNumber++;
         }
@@ -61,34 +66,34 @@ public class ProjScanner {
 		return listOfTokens;
 	}
 	
-	
-	
+	public ArrayList<Line> getListOfLines(){
+		return listOfLines;
+	}
+
 	public ArrayList<String> checkStringForLexemes(String test){
-		ArrayList<String> brokenUpText = new ArrayList<String>();
-		int first = 0;
+		ArrayList<String> data = new ArrayList<String>();
+        int start = 0;
+        int charLocation = 0;
         
-        for(int i = 0; i < test.length(); i++) {
-        	char currentChar = test.charAt(i);
-        	
-        	if (isALexemeCharacter(currentChar)) {
-        		
-        		if (i == test.length()- 1 && test.length() > 0) {
-    				brokenUpText.add(test.substring(0,i));
-    				brokenUpText.add(Character.toString(test.charAt(i)));
-    			} else {
-    				brokenUpText.add(test.substring(first,i));
-    				brokenUpText.add(Character.toString(test.charAt(i)));
-    			}
-        		
-    			first = i+1;
+        for (int i = 0; i < test.length();i++) {
+        	for (char c : listOfLexemeCharacters) {
+        		if (c == test.charAt(i) && i > 0) {
+        			charLocation = i;
+        			data.add(test.substring(start, charLocation));
+        			data.add(Character.toString(test.charAt(i)));
+        			start = i;
+        			break;
+        		}
         	}
         }
-		return brokenUpText;
+        
+		return data;
 	}
 	
 	public void createToken(String item) {
 		Lexeme l = new Lexeme(item);
         Token token = new Token(index, l.getTokenType(), l.getLexemeName(), lineNumber, item);
+        listOfLines.get(lineNumber-1).addToken(token);
         listOfTokens.add(token);
         index++;
 	}
@@ -119,5 +124,12 @@ public class ProjScanner {
 		}
 		
 		return lexeme;
+	}
+	
+	public boolean isAComment(String line) {
+		if (line.contains("--"))
+			return true;
+		else
+			return false;
 	}
 }
