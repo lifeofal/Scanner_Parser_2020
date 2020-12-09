@@ -23,7 +23,7 @@ public class ProjScanner {
 	}
 	
 	public void loadInADAFile(String filename) throws FileNotFoundException {
-		File file = new File("test3.jl");
+		File file = new File(filename);
         Scanner scanner = new Scanner(file);
         
         while (scanner.hasNextLine()) {
@@ -98,6 +98,22 @@ public class ProjScanner {
         index++;
 	}
 	
+	public void printProgram() {
+		System.out.println("Source Code Start");
+		System.out.println();
+		for(Line line : listOfLines) {
+			ArrayList<Token> tokens = line.getTokens();
+			
+			for(Token token : tokens) {
+				System.out.print(token.getVar() + " ");
+			}
+			
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println("Source Code End");
+
+	}
 	//Boolean Statements
 	public boolean isStringEmptyLine(String line) {
 		if (line.length() == 0)

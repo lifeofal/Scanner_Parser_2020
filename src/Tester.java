@@ -8,9 +8,12 @@ public class Tester {
 
     public static void main(String[] args) throws FileNotFoundException {
         ProjScanner scan = new ProjScanner("test3.jl");
-//        scan.printTokenList();
     	
         ProjParser parser = new ProjParser(scan.getListOfLines());
-        parser.parse();
+        parser.checkProgramSyntax();
+        scan.printProgram();
+        scan.printTokenList();
+//        parser.parse();
+
     }
 }

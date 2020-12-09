@@ -70,7 +70,34 @@ public class Token {
 
     public String toString(){
 
-        return "Token " + num + ": " + type + "." + tokenID + "\t\t\t" + var + "\t\t\tLine: " + line;
+        return formatText();
 
+    }
+    
+    public String formatText() {
+    	int max_length = 30;
+    	
+    	String stringBuilder = "";
+    	
+    	String tokenNumberLabel = "Token " + num + ": ";
+    	
+    	stringBuilder += tokenNumberLabel;
+    	
+    	for(int i = 0; i < 15 - tokenNumberLabel.length(); i++) {
+    		stringBuilder += " ";
+    	}
+    	
+    	String typeNameLabel = type + "." + tokenID;
+    	
+    	stringBuilder += typeNameLabel;
+    	
+    	for(int i = 0; i < max_length - typeNameLabel.length(); i++) {
+    		stringBuilder += " ";
+    	}
+    	
+    	String lineNumberLabel = "Line : " + line;
+    	stringBuilder += lineNumberLabel;
+    	
+    	return stringBuilder;
     }
 }

@@ -122,6 +122,43 @@ public class ProjParser {
 		return lexemeType;
 	}
 	
+	public void checkProgramSyntax() {
+		ArrayList<String> errorLocations = new ArrayList<String>();
+		int errors = 0;
+		for(Line line : lines) {
+			boolean isValid = true;
+			ArrayList<Token> currentLinesTokens = line.getTokens();
+			
+			if (!isLineEmpty(line)) {
+				if (currentLinesTokens.get(0).getTokenID().equals("VAR_ID") && currentLinesTokens.get(1).getTokenID().equals("UPDATE")) {
+					for(int i = 2; i < currentLinesTokens.size(); i++){
+						
+					}
+				} else {
+					errorLocations.add("Syntax Error :: Line " + line.lineNumber + " :: Comment : Make sure syntax is correct. Ex : var = 7;");
+					errors++;
+					break;
+				}
+				
+				int indexForLastItem = currentLinesTokens.size() - 1;
+				
+				if (currentLinesTokens.get(indexForLastItem).getVar().indexOf(';') == -1) {
+					errorLocations.add("Syntax Error :: Line " + line.lineNumber + " :: Comment : ; is missing and expected at End of Line");
+					errors++;
+					break;
+				}
+			}			
+		}
+		
+		if (errors != 0) {
+			for(String s : errorLocations) {
+				System.out.println(s);
+			}
+		} else {
+			System.out.println("No Syntax Error found. Will go about running now.");
+		}
+
+	}
 	public String getArithmeticExpressionType(String token) {
 		String lexemeType = "";
 		

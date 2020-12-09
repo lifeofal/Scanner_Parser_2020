@@ -1,10 +1,6 @@
-   function create_constant_expression    (li: in literal_integer) return arithmetic_expression_access
-
-
-
-with memory;
+with memory; 
 use memory;
--
+
 package body arithmetic_expressions is
 
    ---------------
