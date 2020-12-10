@@ -122,7 +122,7 @@ public class ProjParser {
 		return lexemeType;
 	}
 	
-	public void checkProgramSyntax() {
+	public int checkProgramSyntax() {
 		ArrayList<String> errorLocations = new ArrayList<String>();
 		int errors = 0;
 		for(Line line : lines) {
@@ -130,7 +130,13 @@ public class ProjParser {
 			ArrayList<Token> currentLinesTokens = line.getTokens();
 			
 			if (!isLineEmpty(line)) {
-				if (currentLinesTokens.get(0).getTokenID().equals("VAR_ID") && currentLinesTokens.get(1).getTokenID().equals("UPDATE")) {
+				if (currentLinesTokens.get(0).getVar().toUpperCase().contentEquals("PUT")) {
+					if (!hasParenthesis(currentLinesTokens)) {
+						errorLocations.add("Syntax Error :: Line " + line.lineNumber + " :: Comment : Make sure you put both ( and ) around the variable.");
+						errors++;
+						break;
+					}
+				} else if (currentLinesTokens.get(0).getTokenID().equals("VAR_ID") && currentLinesTokens.get(1).getTokenID().equals("UPDATE")) { // Assignment Statement
 					for(int i = 2; i < currentLinesTokens.size(); i++){
 						
 					}
@@ -139,6 +145,7 @@ public class ProjParser {
 					errors++;
 					break;
 				}
+				
 				
 				int indexForLastItem = currentLinesTokens.size() - 1;
 				
@@ -157,7 +164,8 @@ public class ProjParser {
 		} else {
 			System.out.println("No Syntax Error found. Will go about running now.");
 		}
-
+		
+		return errors;
 	}
 	public String getArithmeticExpressionType(String token) {
 		String lexemeType = "";
@@ -178,6 +186,22 @@ public class ProjParser {
 		}
 		
 		return lexemeType;
+	}
+	
+	public boolean hasParenthesis(ArrayList<Token> currentLinesTokens) {
+		boolean leftParen = lineHasParenthesis(currentLinesTokens, "(");
+		boolean rightParen = lineHasParenthesis(currentLinesTokens, "(");;
+		
+		if (leftParen == true && rightParen == true)
+			return true;
+		return false;
+	}
+	
+	public boolean lineHasParenthesis(ArrayList<Token> currentLineTokens, String paren) {
+		for(Token token : currentLineTokens)
+			if (token.getVar().equals(paren))
+				return true;
+		return false;
 	}
 	
 	public boolean isArithemeticExpression(String token) {
@@ -208,7 +232,7 @@ public class ProjParser {
 	}
 	
 	public boolean isAssignmentOperator(String line) {
-		if(line.equals(":=")) {
+		if(line.equals("=")) {
 			return true;
 		}
 		return false;

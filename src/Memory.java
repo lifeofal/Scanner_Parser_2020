@@ -7,4 +7,6 @@ public class Memory {
 		variableName = name;
 		this.data = data;		
 	}
+	
+	
 }
